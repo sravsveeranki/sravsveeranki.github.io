@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sai Sravani Veeranki — Full Stack Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0e0e0e;
+    --ink-soft: #3a3a3a;
+    --ink-muted: #7a7a7a;
+    --paper: #f5f2eb;
+    --paper-warm: #ede9df;
+    --accent: #c84b2f;
+    --accent-soft: #f0d5ce;
+    --teal: #1a5c52;
+    --teal-soft: #cfe0dd;
+    --gold: #b8860b;
+    --gold-soft: #f5ecd0;
+    --border: rgba(14,14,14,0.12);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.25rem 4rem;
+    background: rgba(245,242,235,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 4rem 4rem;
+    gap: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    right: -10%;
+    top: 10%;
+    width: 55%;
+    height: 80%;
+    background: var(--paper-warm);
+    border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%;
+    z-index: 0;
+  }
+  .hero-text { position: relative; z-index: 1; }
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.25rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block; width: 32px; height: 1px; background: var(--accent);
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-bio {
+    font-size: 1rem;
+    color: var(--ink-soft);
+    max-width: 460px;
+    margin-bottom: 2.5rem;
+    line-height: 1.75;
+  }
+  .hero-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 3px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #a33a20; }
+  .btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--border); }
+  .btn-outline:hover { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+
+  .hero-right {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column; gap: 1rem;
+  }
+  .stat-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    display: flex; align-items: center; gap: 1.25rem;
+    animation: slideIn 0.6s ease forwards;
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  .stat-card:nth-child(1) { animation-delay: 0.2s; }
+  .stat-card:nth-child(2) { animation-delay: 0.35s; }
+  .stat-card:nth-child(3) { animation-delay: 0.5s; }
+  .stat-card:nth-child(4) { animation-delay: 0.65s; }
+  @keyframes slideIn {
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .stat-icon {
+    width: 44px; height: 44px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.25rem; flex-shrink: 0;
+  }
+  .stat-icon.teal { background: var(--teal-soft); }
+  .stat-icon.accent { background: var(--accent-soft); }
+  .stat-icon.gold { background: var(--gold-soft); }
+  .stat-icon.ink { background: var(--paper-warm); }
+  .stat-label { font-size: 0.78rem; color: var(--ink-muted); margin-bottom: 1px; }
+  .stat-value { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: var(--ink); }
+
+  /* SECTION SHARED */
+  section { padding: 6rem 4rem; }
+  section:nth-child(even) { background: var(--paper-warm); }
+  .section-header { margin-bottom: 3.5rem; }
+  .section-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .section-tag::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+  .skill-group {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem;
+  }
+  .skill-group-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    padding: 0.3rem 0.75rem;
+    border-radius: 3px;
+    font-size: 0.78rem;
+    font-family: 'DM Mono', monospace;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+  }
+  .tag.primary { background: var(--accent-soft); border-color: #e8b4a8; color: #8b2a14; }
+  .tag.teal { background: var(--teal-soft); border-color: #a8c8c3; color: var(--teal); }
+  .tag.gold { background: var(--gold-soft); border-color: #e0cf9a; color: var(--gold); }
+
+  /* EXPERIENCE */
+  .experience-list { display: flex; flex-direction: column; gap: 0; }
+  .exp-item {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 2rem;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .exp-item:last-child { border-bottom: none; }
+  .exp-meta {}
+  .exp-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+    margin-bottom: 0.5rem;
+  }
+  .exp-company {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    margin-bottom: 0.25rem;
+  }
+  .exp-location {
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+  }
+  .exp-content {}
+  .exp-role {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .exp-bullets li {
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    padding-left: 1.25rem;
+    position: relative;
+    line-height: 1.65;
+  }
+  .exp-bullets li::before {
+    content: '—';
+    position: absolute; left: 0;
+    color: var(--accent);
+    font-size: 0.75rem;
+  }
+
+  /* PROJECTS */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .project-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.75rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .project-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(14,14,14,0.08); }
+  .project-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: var(--ink-muted);
+  }
+  .project-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    line-height: 1.25;
+  }
+  .project-desc { font-size: 0.85rem; color: var(--ink-soft); line-height: 1.7; }
+  .project-tech { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: auto; }
+  .tech-tag {
+    padding: 0.2rem 0.6rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    border-radius: 2px;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    color: var(--ink-muted);
+  }
+
+  /* CERTS */
+  .certs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+  .cert-item {
+    display: flex; align-items: flex-start; gap: 0.875rem;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+  }
+  .cert-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0; margin-top: 0.45rem;
+  }
+  .cert-dot.teal { background: var(--teal); }
+  .cert-dot.gold { background: var(--gold); }
+  .cert-name { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.5; }
+
+  /* CONTACT */
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .contact-text { font-size: 0.95rem; color: var(--ink-soft); line-height: 1.8; margin-bottom: 2rem; }
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-link {
+    display: flex; align-items: center; gap: 1rem;
+    text-decoration: none;
+    color: var(--ink);
+    font-size: 0.88rem;
+    padding: 1rem 1.25rem;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .contact-link:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .contact-link-icon { font-size: 1.1rem; }
+  .contact-link-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--ink-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .contact-link-value { font-size: 0.9rem; }
+  .edu-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2rem;
+  }
+  .edu-degree {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem; margin-bottom: 0.5rem;
+  }
+  .edu-school { color: var(--ink-muted); font-size: 0.88rem; margin-bottom: 0.25rem; }
+  .edu-detail { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--accent); letter-spacing: 0.08em; }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 4rem;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+  }
+
+  /* HERO ANIM */
+  .hero-text > * {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.7s ease forwards;
+  }
+  .hero-eyebrow { animation-delay: 0.1s; }
+  .hero h1 { animation-delay: 0.25s; }
+  .hero-bio { animation-delay: 0.4s; }
+  .hero-links { animation-delay: 0.55s; }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; }
+    .hero::before { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .exp-item { grid-template-columns: 1fr; gap: 0.75rem; }
+    .contact-inner { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">SSV</a>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#certifications">Certs</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-text">
+    <div class="hero-eyebrow">Available for opportunities</div>
+    <h1>Sai Sravani<br><em>Veeranki</em></h1>
+    <p class="hero-bio">Full Stack Developer with expertise in React.js, PHP, and RESTful APIs. Experienced in cloud platforms (AWS, Azure), CI/CD pipelines, and Microsoft Power Platform. MS in Applied Computer Science — building scalable, client-facing solutions.</p>
+    <div class="hero-links">
+      <a href="#contact" class="btn btn-primary">Get in touch</a>
+      <a href="#projects" class="btn btn-outline">View projects</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="stat-card">
+      <div class="stat-icon teal">💼</div>
+      <div>
+        <div class="stat-label">Experience</div>
+        <div class="stat-value">4+ years software engineering</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon accent">☁️</div>
+      <div>
+        <div class="stat-label">Cloud certifications</div>
+        <div class="stat-value">AWS Developer + Azure Fundamentals</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon gold">⚡</div>
+      <div>
+        <div class="stat-label">Power Platform</div>
+        <div class="stat-value">Microsoft PL-900 certified</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon ink">🎓</div>
+      <div>
+        <div class="stat-label">Education</div>
+        <div class="stat-value">MS Applied Computer Science, 3.80 GPA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header">
+    <div class="section-tag">What I work with</div>
+    <h2 class="section-title">Skills & Technologies</h2>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-group">
+      <div class="skill-group-title">Front-end</div>
+      <div class="skill-tags">
+        <span class="tag primary">React.js</span>
+        <span class="tag primary">JavaScript</span>
+        <span class="tag primary">TypeScript</span>
+        <span class="tag primary">HTML5</span>
+        <span class="tag primary">CSS3</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Back-end & Databases</div>
+      <div class="skill-tags">
+        <span class="tag primary">PHP</span>
+        <span class="tag">Java</span>
+        <span class="tag">Python</span>
+        <span class="tag">RESTful APIs</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">MySQL</span>
+        <span class="tag">SQL</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Microsoft Power Platform</div>
+      <div class="skill-tags">
+        <span class="tag gold">PowerApps</span>
+        <span class="tag gold">Power BI</span>
+        <span class="tag gold">Power Automate</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Cloud & DevOps</div>
+      <div class="skill-tags">
+        <span class="tag teal">AWS</span>
+        <span class="tag teal">Azure</span>
+        <span class="tag teal">Docker</span>
+        <span class="tag teal">Kubernetes</span>
+        <span class="tag teal">Jenkins</span>
+        <span class="tag teal">GitHub Actions</span>
+        <span class="tag teal">CI/CD</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Practices & Tools</div>
+      <div class="skill-tags">
+        <span class="tag">Git</span>
+        <span class="tag">Agile/Scrum</span>
+        <span class="tag">Code Reviews</span>
+        <span class="tag">Unit Testing</span>
+        <span class="tag">SDLC</span>
+        <span class="tag">OOP</span>
+        <span class="tag">Design Patterns</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header">
+    <div class="section-tag">Career history</div>
+    <h2 class="section-title">Professional Experience</h2>
+  </div>
+  <div class="experience-list">
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-date">Apr 2025 — Present</div>
+        <div class="exp-company">BNS International Inc</div>
+        <div class="exp-location">Remote, US</div>
+      </div>
+      <div class="exp-content">
+        <div class="exp-role">Software Engineer</div>
+        <ul class="exp-bullets">
+          <li>Enhanced high-availability telecom applications using distributed systems design and Java, improving system uptime by 15%.</li>
+          <li>Redesigned multi-tiered application using design patterns to modularize workflows, reducing defect backlog by 20%.</li>
+          <li>Integrated Selenium WebDriver into Jenkins CI/CD pipelines, accelerating release cycles by 30%.</li>
+          <li>Built REST Assured and Postman API test frameworks to validate authentication and request-response integrity.</li>
+          <li>Executed PostgreSQL queries across distributed services, reducing data-related incidents by 25%.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-date">Aug 2021 — Sep 2023</div>
+        <div class="exp-company">Accenture</div>
+        <div class="exp-location">Telangana, India</div>
+      </div>
+      <div class="exp-content">
+        <div class="exp-role">Associate Software Engineer</div>
+        <ul class="exp-bullets">
+          <li>Executed automation testing on multi-tiered cloud applications, improving test coverage by 40%.</li>
+          <li>Integrated automated test scripts with Azure DevOps and Git, enabling nightly regression runs.</li>
+          <li>Validated backend data integrity through complex SQL queries in compliance-driven workflows.</li>
+          <li>Reduced unauthorized access risks by testing RBAC and session management in enterprise platforms.</li>
+          <li>Improved application responsiveness under peak conditions through load and performance testing.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-date">Mar 2021 — Aug 2021</div>
+        <div class="exp-company">Accenture</div>
+        <div class="exp-location">Telangana, India</div>
+      </div>
+      <div class="exp-content">
+        <div class="exp-role">Software Engineer Trainee</div>
+        <ul class="exp-bullets">
+          <li>Built modular RESTful API components applying OOP principles and data structures.</li>
+          <li>Practiced Selenium WebDriver automation and Git version control in collaborative test projects.</li>
+          <li>Supported incident management and production stability via ServiceNow.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header">
+    <div class="section-tag">What I've built</div>
+    <h2 class="section-title">Projects</h2>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card">
+      <div class="project-num">01</div>
+      <div class="project-title">Full Stack Web Application</div>
+      <div class="project-desc">Multi-tiered web app with a React.js front end and PHP back end. Implemented RESTful endpoints for authentication and data management, with MySQL integration and deployed on AWS via GitHub Actions CI/CD.</div>
+      <div class="project-tech">
+        <span class="tech-tag">React.js</span>
+        <span class="tech-tag">PHP</span>
+        <span class="tech-tag">MySQL</span>
+        <span class="tech-tag">AWS</span>
+        <span class="tech-tag">GitHub Actions</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-num">02</div>
+      <div class="project-title">Power BI Analytics Dashboard</div>
+      <div class="project-desc">Interactive Power BI dashboard connected to PostgreSQL data sources for real-time operational reporting. Automated data refresh workflows using Power Automate, reducing manual reporting effort by 40%.</div>
+      <div class="project-tech">
+        <span class="tech-tag">Power BI</span>
+        <span class="tech-tag">Power Automate</span>
+        <span class="tech-tag">PostgreSQL</span>
+        <span class="tech-tag">DAX</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-num">03</div>
+      <div class="project-title">PowerApps Internal Workflow Tool</div>
+      <div class="project-desc">Canvas-based PowerApps application to streamline an internal approval workflow. Integrated with SharePoint and REST APIs for dynamic data handling, with RBAC for secure, compliant access across user groups.</div>
+      <div class="project-tech">
+        <span class="tech-tag">PowerApps</span>
+        <span class="tech-tag">SharePoint</span>
+        <span class="tech-tag">REST APIs</span>
+        <span class="tech-tag">RBAC</span>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-num">04</div>
+      <div class="project-title">Cloud Automation Pipeline</div>
+      <div class="project-desc">Automated provisioning of scalable AWS cloud resources using Jenkins pipelines. Implemented load testing and performance monitoring to support high-availability requirements across environments.</div>
+      <div class="project-tech">
+        <span class="tech-tag">AWS</span>
+        <span class="tech-tag">Jenkins</span>
+        <span class="tech-tag">Docker</span>
+        <span class="tech-tag">CI/CD</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="section-header">
+    <div class="section-tag">Credentials</div>
+    <h2 class="section-title">Certifications</h2>
+  </div>
+  <div class="certs-grid">
+    <div class="cert-item"><div class="cert-dot"></div><div class="cert-name">AWS Certified Developer – Associate</div></div>
+    <div class="cert-item"><div class="cert-dot teal"></div><div class="cert-name">Microsoft Certified: Azure Fundamentals</div></div>
+    <div class="cert-item"><div class="cert-dot gold"></div><div class="cert-name">Microsoft Certified: Power Platform Fundamentals (PL-900)</div></div>
+    <div class="cert-item"><div class="cert-dot teal"></div><div class="cert-name">Microsoft Certified: Security, Compliance & Identity Fundamentals</div></div>
+    <div class="cert-item"><div class="cert-dot"></div><div class="cert-name">AWS Cloud Technical Essentials</div></div>
+    <div class="cert-item"><div class="cert-dot"></div><div class="cert-name">Automation in the AWS Cloud</div></div>
+    <div class="cert-item"><div class="cert-dot gold"></div><div class="cert-name">Advanced SQL</div></div>
+    <div class="cert-item"><div class="cert-dot gold"></div><div class="cert-name">JavaScript Deep Dive</div></div>
+    <div class="cert-item"><div class="cert-dot"></div><div class="cert-name">Selenium WebDriver with Python</div></div>
+    <div class="cert-item"><div class="cert-dot teal"></div><div class="cert-name">Google AI Essentials</div></div>
+    <div class="cert-item"><div class="cert-dot gold"></div><div class="cert-name">Generative AI: Prompt Engineering Basics</div></div>
+    <div class="cert-item"><div class="cert-dot"></div><div class="cert-name">Introduction to Machine Learning on AWS</div></div>
+    <div class="cert-item"><div class="cert-dot teal"></div><div class="cert-name">CSS Fundamentals: Comprehensive Training</div></div>
+    <div class="cert-item"><div class="cert-dot gold"></div><div class="cert-name">Fundamentals of VueJS</div></div>
+    <div class="cert-item"><div class="cert-dot"></div><div class="cert-name">Oracle Cloud Infrastructure Foundations 2021</div></div>
+    <div class="cert-item"><div class="cert-dot"></div><div class="cert-name">Mastering Test Management and Tools</div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header">
+    <div class="section-tag">Let's connect</div>
+    <h2 class="section-title">Get In Touch</h2>
+  </div>
+  <div class="contact-inner">
+    <div>
+      <p class="contact-text">I'm actively looking for full stack development opportunities — especially roles where I can work with React, Power Platform, and cloud-based solutions. Feel free to reach out for a conversation.</p>
+      <div class="contact-links">
+        <a href="mailto:saisravaniveeranki1@gmail.com" class="contact-link">
+          <span class="contact-link-icon">✉️</span>
+          <div>
+            <div class="contact-link-label">Email</div>
+            <div class="contact-link-value">saisravaniveeranki1@gmail.com</div>
+          </div>
+        </a>
+        <a href="tel:6605281808" class="contact-link">
+          <span class="contact-link-icon">📞</span>
+          <div>
+            <div class="contact-link-label">Phone</div>
+            <div class="contact-link-value">(660) 528-1808</div>
+          </div>
+        </a>
+        <a href="https://linkedin.com/in/sai-sravani-veeranki" target="_blank" class="contact-link">
+          <span class="contact-link-icon">🔗</span>
+          <div>
+            <div class="contact-link-label">LinkedIn</div>
+            <div class="contact-link-value">linkedin.com/in/sai sravani veeranki</div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="edu-card">
+      <div class="section-tag" style="margin-bottom: 1.25rem;">Education</div>
+      <div class="edu-degree">Master of Science<br>Applied Computer Science</div>
+      <div class="edu-school">Northwest Missouri State University</div>
+      <div class="edu-school" style="margin-bottom: 1rem;">Aug 2023 — Dec 2024 · Missouri, US</div>
+      <div class="edu-detail">CGPA: 3.80 / 4.00</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Sai Sravani Veeranki</span>
+  <span>Full Stack Developer · Ellicott City, MD area</span>
+</footer>
+
+</body>
+</html>
